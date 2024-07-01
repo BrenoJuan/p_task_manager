@@ -8,6 +8,9 @@ def create_database():
     conn = sqlite3.connect('tasks.db')
     c = conn.cursor()
     
+    # Deletar a tabela existente (opcional)
+    # c.execute("DROP TABLE IF EXISTS tasks")
+
     # Cria a tabela 'tasks' se não existir
     c.execute('''
     CREATE TABLE IF NOT EXISTS tasks (
