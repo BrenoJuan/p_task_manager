@@ -1,3 +1,5 @@
+# Última versão funcional
+
 import sqlite3
 import streamlit as st
 from datetime import datetime
@@ -9,7 +11,7 @@ def create_database():
     c = conn.cursor()
     
     # Deletar a tabela existente (opcional)
-    c.execute("DROP TABLE IF EXISTS tasks")
+    # c.execute("DROP TABLE IF EXISTS tasks")
     
     # Cria a tabela 'tasks' se não existir
     c.execute('''

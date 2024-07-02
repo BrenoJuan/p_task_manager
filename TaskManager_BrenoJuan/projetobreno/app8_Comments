@@ -1,0 +1,160 @@
+# Importação das bibliotecas necessárias
+import sqlite3
+import streamlit as st
+from datetime import datetime
+
+# Funções de interação com o banco de dados SQLite
+
+# Função para criar o banco de dados e a tabela de tarefas
+def create_database():
+    conn = sqlite3.connect('tasks.db')  # Conexão com o banco de dados
+    c = conn.cursor()  # Cria um cursor para executar comandos SQL
+    
+    # Deletar a tabela existente (opcional)
+    # c.execute("DROP TABLE IF EXISTS tasks")
+    
+    # Cria a tabela 'tasks' se não existir
+    c.execute('''
+    CREATE TABLE IF NOT EXISTS tasks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        task_name TEXT,
+        description TEXT,
+        status TEXT,
+        limit_date DATE,
+        priority TEXT
+    )
+    ''')
+    
+    conn.commit()  # Salva as alterações no banco de dados
+    conn.close()  # Fecha a conexão com o banco de dados
+
+# Função para adicionar uma nova tarefa ao banco de dados
+def add_task(task_name, description, limit_date, priority='Mid', status='Pending'):
+    try:
+        conn = sqlite3.connect('tasks.db')  # Conexão com o banco de dados
+        c = conn.cursor()  # Cria um cursor para executar comandos SQL
+        c.execute("INSERT INTO tasks (task_name, description, status, limit_date, priority) VALUES (?, ?, ?, ?, ?)", (task_name, description, status, limit_date, priority))
+        conn.commit()  # Salva as alterações no banco de dados
+        conn.close()  # Fecha a conexão com o banco de dados
+        st.success("Task added successfully!")  # Mensagem de sucesso exibida ao usuário
+    except sqlite3.Error as e:
+        st.error(f"Error adding task: {e}")  # Mensagem de erro exibida ao usuário em caso de falha
+
+# Função para excluir uma tarefa do banco de dados
+def delete_task(task_id):
+    try:
+        conn = sqlite3.connect('tasks.db')  # Conexão com o banco de dados
+        c = conn.cursor()  # Cria um cursor para executar comandos SQL
+        c.execute("DELETE FROM tasks WHERE id=?", (task_id,))
+        conn.commit()  # Salva as alterações no banco de dados
+        conn.close()  # Fecha a conexão com o banco de dados
+        st.success(f"Task with ID {task_id} deleted successfully!")  # Mensagem de sucesso exibida ao usuário
+    except sqlite3.Error as e:
+        st.error(f"Error deleting task: {e}")  # Mensagem de erro exibida ao usuário em caso de falha
+
+# Função para atualizar uma tarefa no banco de dados
+def update_task(task_id, task_name, description, status, limit_date, priority):
+    try:
+        conn = sqlite3.connect('tasks.db')  # Conexão com o banco de dados
+        c = conn.cursor()  # Cria um cursor para executar comandos SQL
+        c.execute("UPDATE tasks SET task_name = ?, description = ?, status = ?, limit_date = ?, priority = ? WHERE id = ?", (task_name, description, status, limit_date, priority, task_id))
+        conn.commit()  # Salva as alterações no banco de dados
+        conn.close()  # Fecha a conexão com o banco de dados
+        st.success(f"Task with ID {task_id} updated successfully!")  # Mensagem de sucesso exibida ao usuário
+    except sqlite3.Error as e:
+        st.error(f"Error updating task: {e}")  # Mensagem de erro exibida ao usuário em caso de falha
+
+# Função para visualizar todas as tarefas do banco de dados
+def view_tasks(order_by=None):
+    conn = sqlite3.connect('tasks.db')  # Conexão com o banco de dados
+    c = conn.cursor()  # Cria um cursor para executar comandos SQL
+    if order_by:
+        c.execute(f"SELECT id, task_name, description, status, limit_date, priority FROM tasks ORDER BY {order_by}")
+    else:
+        c.execute("SELECT id, task_name, description, status, limit_date, priority FROM tasks")
+    tasks = c.fetchall()  # Recupera todas as linhas do resultado da consulta
+    conn.close()  # Fecha a conexão com o banco de dados
+    return tasks  # Retorna a lista de tarefas
+
+# Função para pesquisar tarefas no banco de dados por nome
+def search_task(task_name):
+    conn = sqlite3.connect('tasks.db')  # Conexão com o banco de dados
+    c = conn.cursor()  # Cria um cursor para executar comandos SQL
+    c.execute("SELECT * FROM tasks WHERE task_name=?", (task_name,))
+    tasks = c.fetchall()  # Recupera todas as linhas do resultado da consulta
+    conn.close()  # Fecha a conexão com o banco de dados
+    return tasks  # Retorna a lista de tarefas encontradas
+
+# Interface do Streamlit
+
+def main():
+    st.title("Task Manager")  # Título principal da aplicação
+
+    create_database()  # Chama a função para criar o banco de dados e a tabela de tarefas
+
+    st.sidebar.header("Operations")  # Cabeçalho para as operações disponíveis no menu lateral
+    operation = st.sidebar.radio("Select operation", ("Add Task", "Delete Task", "Update Task", "Search Task", "View Tasks"))  # Menu de seleção de operações
+
+    if operation == "Add Task":
+        st.header("Add Task")  # Título da seção para adicionar uma nova tarefa
+        task_name = st.text_input("Task Name")  # Entrada de texto para o nome da tarefa
+        description = st.text_area("Description")  # Área de texto para a descrição da tarefa
+        limit_date = st.date_input("Limit Date")  # Entrada de data para a data limite da tarefa
+        priority = st.selectbox("Priority", ["Low", "Mid", "High"])  # Caixa de seleção para a prioridade da tarefa
+        if st.button("Add Task"):  # Botão para adicionar a tarefa
+            if task_name and limit_date:  # Verifica se os campos obrigatórios estão preenchidos
+                add_task(task_name, description, limit_date, priority)  # Chama a função para adicionar a tarefa
+            else:
+                st.warning("Task Name and Limit Date are required.")  # Mensagem de aviso se os campos obrigatórios não estiverem preenchidos
+
+    elif operation == "Delete Task":
+        st.header("Delete Task")  # Título da seção para excluir uma tarefa
+        tasks = view_tasks()  # Obtém a lista de tarefas para exibição
+        selected_task = st.selectbox("Select Task to Delete", [f"{task[1]} (ID: {task[0]})" for task in tasks])  # Caixa de seleção para selecionar a tarefa a ser excluída
+        if selected_task:
+            task_id = int(selected_task.split("ID: ")[1].rstrip(")"))  # Extrai o ID da tarefa selecionada
+            if st.button("Delete Task"):  # Botão para confirmar a exclusão da tarefa
+                delete_task(task_id)  # Chama a função para excluir a tarefa
+
+    elif operation == "Update Task":
+        st.header("Update Task")  # Título da seção para atualizar uma tarefa
+        tasks = view_tasks()  # Obtém a lista de tarefas para exibição
+        selected_task = st.selectbox("Select Task to Update", [f"{task[1]} (ID: {task[0]})" for task in tasks])  # Caixa de seleção para selecionar a tarefa a ser atualizada
+        
+        if selected_task:
+            task_id = int(selected_task.split("ID: ")[1].rstrip(")"))  # Extrai o ID da tarefa selecionada
+            st.subheader(f"Update Task '{selected_task}'")  # Subtítulo para indicar qual tarefa está sendo atualizada
+            current_task = [task for task in tasks if task[0] == task_id][0]  # Obtém os detalhes da tarefa atual
+            current_name, current_description, current_status, current_limit_date, current_priority = current_task[1:]  # Extrai os detalhes da tarefa atual
+            
+            task_name = st.text_input("Task Name", value=current_name)  # Entrada de texto para editar o nome da tarefa
+            description = st.text_area("Description", value=current_description)  # Área de texto para editar a descrição da tarefa
+            status = st.selectbox("Status", ["Pending", "In Progress", "Completed"], index=["Pending", "In Progress", "Completed"].index(current_status))  # Caixa de seleção para editar o status da tarefa
+            limit_date = st.date_input("Limit Date", value=datetime.strptime(current_limit_date, "%Y-%m-%d").date() if current_limit_date else datetime.now().date())  # Entrada de data para editar a data limite da tarefa
+            priority = st.selectbox("Priority", ["Low", "Mid", "High"], index=["Low", "Mid", "High"].index(current_priority))  # Caixa de seleção para editar a prioridade da tarefa
+
+            if st.button("Update Task"):  # Botão para confirmar a atualização da tarefa
+                update_task(task_id, task_name, description, status, limit_date, priority)  # Chama a função para atualizar a tarefa
+
+    elif operation == "Search Task":
+        st.header("Search Tasks")  # Título da seção para buscar tarefas
+        task_name = st.text_input("Task Name")  # Entrada de texto para inserir o nome da tarefa a ser buscada
+        if st.button("Search Tasks"):  # Botão para iniciar a busca das tarefas
+            tasks = search_task(task_name)  # Chama a função para buscar as tarefas pelo nome
+            if tasks:
+                st.table(tasks)  # Exibe uma tabela com as tarefas encontradas
+            else:
+                st.warning("No tasks found.")  # Mensagem de aviso se nenhuma tarefa for encontrada
+
+    elif operation == "View Tasks":
+        st.header("View All Tasks")  # Título da seção para visualizar todas as tarefas
+        order_by = st.selectbox("Order by", ["task_name", "description", "status", "limit_date", "priority"])  # Caixa de seleção para ordenar as tarefas por diferentes critérios
+        tasks = view_tasks(order_by=order_by)  # Obtém a lista de tarefas para exibição ordenada
+        if tasks:
+            task_table = [(task[0], task[1], task[2], task[3], task[4], task[5]) if len(task) == 6 else (task[0], "", "", "", "", "") for task in tasks]  # Formata os dados das tarefas para exibição na tabela
+            st.table(task_table)  # Exibe a tabela com as tarefas
+        else:
+            st.info("No tasks available.")  # Mensagem informativa se não houver tarefas disponíveis
+
+if __name__ == '__main__':
+    main()  # Chama a função principal para iniciar a aplicação
