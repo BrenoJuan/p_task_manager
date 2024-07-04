@@ -25,13 +25,18 @@ E para a interface personalizada do streamlit: http://localhost:8501
 - A funcionalidade da aba "Search Task" não funciona pesquisando apenas letras ou parte de palavras, para achar a linha registrada, é necessário que pesquise o nome inteiro da tarefa.
 - Os ID's são autoincrementados.
 
-## Não utilizei **nenhum** dos códigos do professor, tudo que foi feito, foi realizado a partir de:
+## Não reutilizei os códigos do professor, tudo o que foi feito, foi realizado do zero a partir de:
 
-- Aprendizado em aula;
-- Pesquisas individuais;
+- Aprendizado em aula síncrona e respectivas gravações;
+- Pesquisas individuais do aluno;
 - Criação individual do aluno;
 - Interações com variados conteúdos na internet.
 
-*Focando exclusivamente no aprendizado individual do aluno, comprovando com o resultado positivo ao final do projeto*
+Tanto é que, é possível verificar nas outras pastas, os testes individuais do aluno para tentar aplicar alguns dos conceitos apresentados em sala de aula.
+
+Pasta: p_task_manager\TaskManager_BrenoJuan\projetobreno | início de testes e desenvolvimento para o aprendizado e utilização dos códigos.
+Pasta: p_task_manager\TaskManager_BrenoJuan\testecalculator | início de testes e desenvolvimento com integração ao fastapi e a interface streamlit.
+
+*Focando exclusivamente no aprendizado individual do aluno, comprovando com o resultado positivo ao final do projeto.*
 
 '''
