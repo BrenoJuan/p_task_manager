@@ -37,6 +37,6 @@ Tanto é que, é possível verificar nas outras pastas, os testes individuais do
 Pasta: p_task_manager\TaskManager_BrenoJuan\projetobreno | início de testes e desenvolvimento para o aprendizado e utilização dos códigos.
 Pasta: p_task_manager\TaskManager_BrenoJuan\testecalculator | início de testes e desenvolvimento com integração ao fastapi e a interface streamlit.
 
-*Focando exclusivamente no aprendizado individual do aluno, comprovando com o resultado positivo ao final do projeto.*
+*Focando exclusivamente no aprendizado individual do aluno, comprovado de forma prática pelo resultado positivo entregue ao final do projeto.*
 
 '''
