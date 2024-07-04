@@ -14,7 +14,7 @@ uvicorn TaskManager_BrenoJuan.projetofinal.task_manager_api:app --reload
 
 Para o segundo, task_manager_ui, utiliza-se a sintaxe a baixo (substituindo pelo seu respectivo caminho localizado à sua escolha):
 
-streamlit run "C:\Users\[seu usuário]\Desktop\p_task_manager\TaskManager_BrenoJuan\projetofinal\task_manager_ui.py"
+streamlit run "C:\Users\\[seu usuário]\Desktop\p_task_manager\TaskManager_BrenoJuan\projetofinal\task_manager_ui.py"
 
 Com tudo certo, caso não abra no navegador de forma padrão, é possível abrir o fastapi usando: http://127.0.0.1:8000/docs#/
 E para a interface personalizada do streamlit: http://localhost:8501
