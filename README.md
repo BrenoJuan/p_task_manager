@@ -19,11 +19,11 @@ streamlit run "C:\Users\{seu usuário}\Desktop\p_task_manager\TaskManager_BrenoJ
 Com tudo certo, caso não abra no navegador de forma padrão, é possível abrir o fastapi usando: http://127.0.0.1:8000/docs#/
 E para a interface personalizada do streamlit: http://localhost:8501
 
->>> Pontos de observação <<<: 
+## Pontos de observação: 
 
-Por padrão quando criar uma tarefa, ela terá o status "Pending", e caso deseje atualizar, é possível na aba "Update Task".
-A funcionalidade da aba "Search Task" não funciona pesquisando apenas letras ou parte de palavras, para achar a linha registrada, é necessário que pesquise o nome inteiro da tarefa.
-Os ID's são autoincrementados.
+- Por padrão quando criar uma tarefa, ela terá o status "Pending", e caso deseje atualizar, é possível na aba "Update Task".
+- A funcionalidade da aba "Search Task" não funciona pesquisando apenas letras ou parte de palavras, para achar a linha registrada, é necessário que pesquise o nome inteiro da tarefa.
+- Os ID's são autoincrementados.
 
 ## Não utilizei **nenhum** dos códigos do professor, tudo que foi feito, foi realizado a partir de:
 
