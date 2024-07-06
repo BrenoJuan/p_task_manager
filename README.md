@@ -24,6 +24,7 @@ E para a interface personalizada do streamlit: http://localhost:8501
 - Por padrão quando criar uma tarefa, ela terá o status "Pending", e caso deseje atualizar, é possível na aba "Update Task".
 - A funcionalidade da aba "Search Task" não funciona pesquisando apenas letras ou parte de palavras, para achar a linha registrada, é necessário que pesquise o nome inteiro da tarefa.
 - Os ID's são autoincrementados.
+- Se na aba "View Tasks" não estiver com a respectiva lista das tarefas, é por conta de carregamento. Dê um refresh na página, clique em outra funcionalidade e retorne que aparecerá após selecionar a aba, todas as tarefas registradas, caso tenha.
 
 ## Não reutilizei os códigos do professor, tudo o que foi feito, foi realizado do zero a partir de:
 
